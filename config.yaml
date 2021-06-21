@@ -1,0 +1,4 @@
+service:
+  app: sandbox-notification
+  version: 1.0
+database:
