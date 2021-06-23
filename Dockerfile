@@ -1,13 +1,13 @@
-FROM python:3.9-slim
+FROM tiangolo/uvicorn-gunicorn-fastapi:latest
 
-WORKDIR /service
+WORKDIR /app
 
-COPY . /service
+COPY . /app
 
 RUN pip install -r requirements.txt
 
-EXPOSE 5000
+EXPOSE 8000
 
 ENTRYPOINT ["python"]
 
-CMD [ "./src/app.py" ]
+CMD [ "./sandbox_notification/app.py" ]

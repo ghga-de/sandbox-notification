@@ -1,11 +1,17 @@
 """
-
+app_test.py
 """
+from sandbox_notification.config import config
 
 
-def test_app():
+CONFIG_YAML = "../example_config.yaml"
+HOST = 'host'
+
+
+def test_config():
     """
-    a simple test
+    test case to test if the config file example_config.yaml is readable.
     :return:
     """
-    assert 2 + 2 == 4
+    config_data = config.get_config(CONFIG_YAML)
+    assert config_data[HOST] == "0.0.0.0"
