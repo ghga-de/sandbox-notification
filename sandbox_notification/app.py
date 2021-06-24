@@ -9,7 +9,7 @@ from service import send_mail
 from config import config
 
 app = FastAPI()
-CONFIG_YAML = "../example_config.yaml"
+CONFIG_YAML = "example_config.yaml"
 HOST = 'host'
 PORT = 'port'
 config_data = config.get_config(CONFIG_YAML)
@@ -21,8 +21,8 @@ async def send_email():
     send mail
     :return:
     """
-    sender = "mani.ghga@gmail.com"
-    receiver = ["manikandan.ravichandran@dkfz-heidelberg.de"]
+    sender = "example@gmail.com"
+    receiver = ["receiver@example.com"]
     subject = "hey"
     message = "hello world"
     send_mail.send_email(sender, receiver, subject, message)

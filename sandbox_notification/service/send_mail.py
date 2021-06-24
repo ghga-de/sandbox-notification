@@ -20,6 +20,6 @@ def send_email(sender, receiver, subject, message):
     server.ehlo()
     server.starttls()
     # the password for the mail account goes as the 2nd parameter for the server.login method.
-    server.login(sender, "")
+    server.login(sender, "password")
     server.send_message(msg)
     server.quit()

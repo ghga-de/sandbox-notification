@@ -1,7 +1,7 @@
 """
 config.py
 """
-import os.path
+import pathlib as p
 import yaml
 
 
@@ -11,6 +11,6 @@ def get_config(filename):
     :param filename:
     :return: config
     """
-    with open(os.path.relpath(filename), "r") as yamlfile:
+    with p.Path(filename).open("r") as yamlfile:
         config = yaml.load(yamlfile, Loader=yaml.FullLoader)
     return config
