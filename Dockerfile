@@ -15,7 +15,6 @@
 FROM python:3.9-slim
 
 EXPOSE 8000
-EXPOSE 15672
 
 # copy and install package from source
 COPY . /app
