@@ -1,5 +1,28 @@
 #!/usr/bin/env python
-import pika
+import pika, json, smtplib, sys
+from email.message import EmailMessage
+
+SENDER_EMAIL = 'contact@ghga.de'
+EMAIL_SUBJECT = 'GHGA Sandbox Notification'
+MAX_ATTEMPTS = 5
+
+def send_email(recipient_email, message, smtp_server, smtp_port, smtp_username, smtp_password):
+    """
+    send email
+    :return:
+    """
+    msg = EmailMessage()
+    msg['Subject'] = EMAIL_SUBJECT
+    # Does not work when sent from Gmail
+    msg['From'] = SENDER_EMAIL
+    msg['To'] = recipient_email
+    msg.set_content(message)
+    server = smtplib.SMTP(smtp_server, int(smtp_port))
+    server.starttls()
+    server.ehlo()
+    server.login(smtp_username, smtp_password)
+    server.send_message(msg)
+    server.quit()
 
 connection = pika.BlockingConnection(
     pika.ConnectionParameters(host='rabbitmq'))
@@ -15,9 +38,28 @@ channel.queue_bind(exchange='notifications', queue=queue_name)
 print(' [*] Waiting for notification. To exit press CTRL+C')
 
 def callback(ch, method, properties, body):
-    print(" [x] %r" % body)
+    messageobj = json.loads(body)
+    print(" [x] Message received")
+
+    attempt = 1
+    while attempt <= MAX_ATTEMPTS:
+        try:
+            send_email(messageobj['recipient_email'], messageobj['message'], messageobj['smtp_server'], messageobj['smtp_port'], messageobj['smtp_username'], messageobj['smtp_password'])
+            print('  [>] Email notification sent.\n')
+            print(' [*] Waiting for notification. To exit press CTRL+C')
+            break
+        except Exception:
+            print(f"There has been an error sending an e-mail notification on attempt {attempt}/{MAX_ATTEMPTS}.")
+            attempt += 1
+    else:
+        print ('Error: Maximum number of attempts reached. Email could not be sent.')
+
 
 channel.basic_consume(
     queue=queue_name, on_message_callback=callback, auto_ack=True)
 
-channel.start_consuming()
+try:
+    channel.start_consuming()
+except KeyboardInterrupt:
+    print()
+    sys.exit(0)

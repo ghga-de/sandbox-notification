@@ -1,0 +1,30 @@
+#!/bin/bash
+# launch service in dev container
+
+cd /workspace/sandbox_notification
+
+python receiver.py &
+sleep 2
+
+while true
+do
+    echo
+    echo "---"
+    echo "Send notification"
+    echo "Recipient name:"
+    read RNAME
+    echo "Recipient email:"
+    read REMAIL
+    echo "SMTP server:"
+    read SMTPSERV
+    echo "SMTP port:"
+    read SMTPPORT
+    echo "SMTP username:"
+    read SMTPUSER
+    echo "SMTP password:"
+    read SMTPPASS
+    echo
+
+    bash -c "python sender.py \"$RNAME\" \"$REMAIL\" \"$SMTPSERV\" \"$SMTPPORT\" \"$SMTPUSER\" \"$SMTPPASS\""
+    sleep 3
+done

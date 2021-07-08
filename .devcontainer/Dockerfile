@@ -6,3 +6,4 @@ FROM mcr.microsoft.com/vscode/devcontainers/python:0-${VARIANT}
 
 # Copy install and launcher script to bin:
 COPY ./dev_install /bin
+COPY ./dev_launcher /bin
