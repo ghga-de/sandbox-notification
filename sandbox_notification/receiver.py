@@ -45,7 +45,6 @@ def callback(ch, method, properties, body):
     while attempt <= MAX_ATTEMPTS:
         try:
             send_email(messageobj['recipient_email'], messageobj['message'], messageobj['smtp_server'], messageobj['smtp_port'], messageobj['smtp_username'], messageobj['smtp_password'])
-            time.sleep(5)
             print('  [>] Email notification sent.\n')
             break
         except Exception:
