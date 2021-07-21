@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import pika, json, smtplib, sys
+import pika, json, smtplib, sys, time
 from email.message import EmailMessage
 
 SENDER_EMAIL = 'contact@ghga.de'
@@ -28,12 +28,12 @@ connection = pika.BlockingConnection(
     pika.ConnectionParameters(host='rabbitmq'))
 channel = connection.channel()
 
-channel.exchange_declare(exchange='notifications', exchange_type='fanout')
+channel.exchange_declare(exchange='notifications', exchange_type='topic')
 
-result = channel.queue_declare(queue='', exclusive=True)
+result = channel.queue_declare(queue='notifications', durable=True)
 queue_name = result.method.queue
 
-channel.queue_bind(exchange='notifications', queue=queue_name)
+channel.queue_bind(exchange='notifications', queue='notifications', routing_key='#.notifications.#')
 
 print(' [*] Waiting for notification. To exit press CTRL+C')
 
@@ -45,18 +45,21 @@ def callback(ch, method, properties, body):
     while attempt <= MAX_ATTEMPTS:
         try:
             send_email(messageobj['recipient_email'], messageobj['message'], messageobj['smtp_server'], messageobj['smtp_port'], messageobj['smtp_username'], messageobj['smtp_password'])
+            time.sleep(5)
             print('  [>] Email notification sent.\n')
-            print(' [*] Waiting for notification. To exit press CTRL+C')
             break
         except Exception:
             print(f"There has been an error sending an e-mail notification on attempt {attempt}/{MAX_ATTEMPTS}.")
             attempt += 1
+            time.sleep(5)
     else:
         print ('Error: Maximum number of attempts reached. Email could not be sent.')
+    ch.basic_ack(delivery_tag = method.delivery_tag)
+    print(' [*] Waiting for notification. To exit press CTRL+C')
 
-
+channel.basic_qos(prefetch_count=1)
 channel.basic_consume(
-    queue=queue_name, on_message_callback=callback, auto_ack=True)
+    queue=queue_name, on_message_callback=callback)
 
 try:
     channel.start_consuming()

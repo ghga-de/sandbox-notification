@@ -3,14 +3,19 @@
 
 cd /workspace/sandbox_notification
 
-python receiver.py &
+( (python receiver.py) >> logs/worker1 ) &
+pid[0]=$!
+( (python receiver.py) >> logs/worker2 ) &
+pid[1]=$!
 sleep 2
+
+trap "kill ${pid[0]}; kill ${pid[1]}; exit" INT EXIT TERM
 
 while true
 do
     echo
     echo "---"
-    echo "Send notification"
+    echo "Send notification (check /sandbox_notification/logs/ for consumer processes logs)."
     echo "Recipient name:"
     read RNAME
     echo "Recipient email:"

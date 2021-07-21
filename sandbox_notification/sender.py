@@ -24,9 +24,11 @@ def main(args):
       pika.ConnectionParameters(host='rabbitmq'))
   channel = connection.channel()
 
-  channel.exchange_declare(exchange='notifications', exchange_type='fanout')
+  channel.exchange_declare(exchange='notifications', exchange_type='topic')
 
-  channel.basic_publish(exchange='notifications', routing_key='', body=message)
+  routing_key = 'test.sandbox.notifications'
+
+  channel.basic_publish(exchange='notifications', routing_key=routing_key, body=message, properties=pika.BasicProperties(delivery_mode = 2))
   print(' [x] Sent notification.')
   connection.close()
 
