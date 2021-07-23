@@ -39,7 +39,8 @@ print(' [*] Waiting for notification. To exit press CTRL+C')
 
 def callback(ch, method, properties, body):
     messageobj = json.loads(body)
-    print(" [x] Message received")
+    print(" [x] Message received:")
+    print(body)
 
     attempt = 1
     while attempt <= MAX_ATTEMPTS:
