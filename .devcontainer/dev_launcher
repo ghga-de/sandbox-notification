@@ -30,6 +30,6 @@ do
     read SMTPPASS
     echo
 
-    bash -c "python sender.py \"'$RNAME'\" '\"$REMAIL'\" '\"$SMTPSERV'\" '\"$SMTPPORT'\" '\"$SMTPUSER'\" '\"$SMTPPASS'\"
+    bash -c "python sender.py '$RNAME' '$REMAIL' '$SMTPSERV' '$SMTPPORT' '$SMTPUSER' '$SMTPPASS'"
     sleep 3
 done
