@@ -2,10 +2,11 @@
 # launch service in dev container
 
 cd /workspace/sandbox_notification
+mkdir -p logs
 
-( (python receiver.py) >> logs/worker1 ) &
+python receiver.py >> logs/worker1 &
 pid[0]=$!
-( (python receiver.py) >> logs/worker2 ) &
+python receiver.py >> logs/worker2 &
 pid[1]=$!
 sleep 2
 
@@ -30,6 +31,6 @@ do
     read SMTPPASS
     echo
 
-    bash -c "python sender.py '$RNAME' '$REMAIL' '$SMTPSERV' '$SMTPPORT' '$SMTPUSER' '$SMTPPASS'"
+    python sender.py "$RNAME" "$REMAIL" "$SMTPSERV" "$SMTPPORT" "$SMTPUSER" "$SMTPPASS"
     sleep 3
 done
