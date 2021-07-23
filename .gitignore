@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 # Bash logging
-sandbox_notification/logs/*
+.devcontainer/logs/*

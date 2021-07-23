@@ -53,7 +53,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'sandbox-notification=sandbox_notification.__main__:run_cli',
+            'sandbox-notification=sandbox_notification.__main__:run',
         ],
     },
 )
