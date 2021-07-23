@@ -1,8 +1,13 @@
+#!/usr/bin/env python
+
 """
-app.py This module serves as the entry point for the application.
+This script simulates a service that is sending
+a notification request to the notification service.
+
+Usage:
+  python sender.py "$RNAME" "$REMAIL" "$SMTPSERV" "$SMTPPORT" "$SMTPUSER" "$SMTPPASS"
 """
 
-#!/usr/bin/env python
 import pika, sys, json, argparse
 
 def main(args):
