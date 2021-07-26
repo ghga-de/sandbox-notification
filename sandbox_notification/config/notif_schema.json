@@ -1,12 +1,6 @@
 {
-    "sender": "The user ID of the sender",
-    "recipient": "The user ID of the recipient",
     "recipient_name": "The name of the recipient",
     "recipient_email": "The email of the recipient",
     "message": "The message body",
-    "smtp_server": "The SMTP server",
-    "smtp_port": "The SMTP port",
-    "smtp_username": "The SMTP username",
-    "smtp_password": "The SMTP password",
-    "required": ["sender", "recipient", "recipient_name", "recipient_email", "message", "SMTP_server", "SMTP_username", "SMTP_password"]
+    "required": ["recipient_name", "recipient_email", "message"]
 }

@@ -1,16 +1,17 @@
 #!/bin/bash
 # launch service in dev container
 
-cd /workspace/.devcontainer
-mkdir -p logs
+cd /workspace/sandbox_notification
 
-( sandbox-notification >> logs/worker1 ) &
+sandbox-notification "#.notifications.#" &
 pid[0]=$!
-( sandbox-notification >> logs/worker2 ) &
+sandbox-notification "#.notifications.#" &
 pid[1]=$!
 sleep 2
 
 trap "kill ${pid[0]}; kill ${pid[1]}; exit" INT EXIT TERM
+
+cd ../.devcontainer
 
 while true
 do
