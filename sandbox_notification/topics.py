@@ -4,9 +4,8 @@ from datetime import datetime
 import json
 import logging
 from pathlib import Path
-import time
 import pika
-from .core.send import send_email
+from .core.send import send_email, MaxAttemptsReached
 
 MAX_ATTEMPTS = 5
 
@@ -16,22 +15,13 @@ def callback(channel, method, _, body):
     messageobj = json.loads(body)
     logging.info(" [x] %s: Message received",
                     datetime.now().isoformat(timespec='milliseconds'))
-
-    attempt = 1
-    while attempt <= MAX_ATTEMPTS:
-        try:
-            send_email(messageobj)
-            logging.info("  [>] %s: Email notification sent.\n",
-                    datetime.now().isoformat(timespec='milliseconds'))
-            break
-        except Exception:
-            logging.warning(datetime.now().isoformat(timespec='milliseconds') + f": There has been an error sending an e-mail notification on attempt {attempt}/{MAX_ATTEMPTS}.")
-            attempt += 1
-            time.sleep(5)
+    try:
+        send_email(messageobj)
+    except MaxAttemptsReached:
+        logging.exception('')
+        channel.basic_reject(delivery_tag = method.delivery_tag)
     else:
-        logging.error('%s: Maximum number of attempts reached. Email could not be sent.',
-                datetime.now().isoformat(timespec='milliseconds'))
-    channel.basic_ack(delivery_tag = method.delivery_tag)
+        channel.basic_ack(delivery_tag = method.delivery_tag)
 
 
 def subscribe(topic_str):
@@ -58,7 +48,7 @@ def subscribe(topic_str):
         queue=queue_name,
         on_message_callback=callback
     )
-    
+
     logging.info(" [*] %s: Waiting for notification.",
             datetime.now().isoformat(timespec='milliseconds'))
     channel.start_consuming()

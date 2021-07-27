@@ -15,7 +15,7 @@ import logging
 from pathlib import Path
 import pika
 
-def main(message_data):
+def main(message):
     """Run a test for publishing a notification."""
     Path('logs/').mkdir(exist_ok=True)
     logging.basicConfig(filename='logs/' +
@@ -25,13 +25,14 @@ def main(message_data):
     messageobj = {
         'sender': 'userid',
         'recipient': 'userid',
-        'recipient_name': message_data.recipient_name,
-        'recipient_email': message_data.recipient_email,
-        'message': 'Dear ' + message_data.recipient_name + '.\nThis is a notification from the GHGA sandbox notification service.',
-        'smtp_server': message_data.smtp_server,
-        'smtp_port': message_data.smtp_port,
-        'smtp_username': message_data.smtp_username,
-        'smtp_password': message_data.smtp_password,
+        'recipient_name': message.recipient_name,
+        'recipient_email': message.recipient_email,
+        'message': 'Dear ' + message.recipient_name +
+                '.\nThis is a notification from the GHGA sandbox notification service.',
+        'smtp_server': message.smtp_server,
+        'smtp_port': message.smtp_port,
+        'smtp_username': message.smtp_username,
+        'smtp_password': message.smtp_password,
     }
 
     message = json.dumps(messageobj)
@@ -44,18 +45,20 @@ def main(message_data):
 
     routing_key = 'test.sandbox.notifications'
 
-    channel.basic_publish(exchange='notifications', routing_key=routing_key, body=message, properties=pika.BasicProperties(delivery_mode = 2))
+    channel.basic_publish(exchange='notifications', routing_key=routing_key,
+            body=message, properties=pika.BasicProperties(delivery_mode = 2))
     logging.info(" [x] %s: Sent notification.",
             datetime.now().isoformat(timespec='milliseconds'))
     connection.close()
 
 if __name__=="__main__":
-    parser = argparse.ArgumentParser(description = 'Send a notification message to another script that send a notification email.')
+    parser = argparse.ArgumentParser(description =
+            'Send a notification message to another script that send a notification email.')
     parser.add_argument('recipient_name', type=str)
     parser.add_argument('recipient_email', type=str)
     parser.add_argument('smtp_server', type=str)
     parser.add_argument('smtp_port', type=str)
     parser.add_argument('smtp_username', type=str)
     parser.add_argument('smtp_password', type=str)
-    message_data = parser.parse_args()
-    main(message_data)
+    args = parser.parse_args()
+    main(args)
