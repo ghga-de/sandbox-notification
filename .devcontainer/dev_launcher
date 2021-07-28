@@ -3,15 +3,15 @@
 
 cd /workspace/sandbox_notification
 
-sandbox-notification "#.notifications.#" &
+(sandbox-notification "#.notifications.#") &
 pid[0]=$!
-sandbox-notification "#.notifications.#" &
+sleep 0.1
+(sandbox-notification "#.notifications.#") &
 pid[1]=$!
-sleep 2
 
 trap "kill ${pid[0]}; kill ${pid[1]}; exit" INT EXIT TERM
 
-cd ../.devcontainer
+cd ../test/test_publisher
 
 while true
 do
@@ -33,5 +33,4 @@ do
     echo
 
     python test_publisher.py "$RNAME" "$REMAIL" "$SMTPSERV" "$SMTPPORT" "$SMTPUSER" "$SMTPPASS"
-    sleep 3
 done

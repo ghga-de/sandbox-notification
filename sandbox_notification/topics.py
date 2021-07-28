@@ -10,26 +10,28 @@ from .core.send import send_email, MaxAttemptsReached
 MAX_ATTEMPTS = 5
 
 
-def callback(channel, method, _, body):
-    """Executed once a message was received"""
+def callback(channel:pika.channel.Channel, method:pika.spec.Basic.Deliver,
+        _:pika.spec.BasicProperties, body:str):
+    """Executed once a message is received"""
+
     messageobj = json.loads(body)
     logging.info(" [x] %s: Message received",
                     datetime.now().isoformat(timespec='milliseconds'))
     try:
         send_email(messageobj)
-    except MaxAttemptsReached:
-        logging.exception('')
-        channel.basic_reject(delivery_tag = method.delivery_tag)
+    except (MaxAttemptsReached, ValueError):
+        channel.basic_nack(delivery_tag = method.delivery_tag, requeue=False)
     else:
         channel.basic_ack(delivery_tag = method.delivery_tag)
 
 
-def subscribe(topic_str):
+def subscribe(topic_str:str):
     """Subscribe this consumer to a topic or set of topics based on a
     topic string as defined in the AMQP 0.9.1 specification."""
-    Path('logs/').mkdir(exist_ok=True)
-    logging.basicConfig(filename='logs/' +
-            datetime.now().isoformat(timespec='milliseconds') + '_consumer.log',
+
+    Path(Path(__file__).parent / 'logs/').mkdir(exist_ok=True)
+    logging.basicConfig(filename=(str(Path(__file__).parent.resolve()) + '/logs/' +
+            datetime.now().isoformat(timespec='milliseconds') + '_consumer.log'),
             encoding='utf-8', level=logging.INFO)
 
     connection = pika.BlockingConnection(

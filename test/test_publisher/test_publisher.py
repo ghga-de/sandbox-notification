@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 This script simulates a service that is sending
 a notification request to the notification service.
@@ -15,12 +13,12 @@ import logging
 from pathlib import Path
 import pika
 
-def main(message):
+def main(message:argparse.Namespace):
     """Run a test for publishing a notification."""
-    Path('logs/').mkdir(exist_ok=True)
-    logging.basicConfig(filename='logs/' +
-				datetime.now().isoformat(timespec='milliseconds') + '_publisher.log',
-				encoding='utf-8', level=logging.INFO)
+    Path(Path(__file__).parent / 'logs/').mkdir(exist_ok=True)
+    logging.basicConfig(filename=(str(Path(__file__).parent.resolve()) + '/logs/' +
+            datetime.now().isoformat(timespec='milliseconds') + '_publisher.log'),
+            encoding='utf-8', level=logging.INFO)
 
     messageobj = {
         'sender': 'userid',
@@ -51,7 +49,8 @@ def main(message):
             datetime.now().isoformat(timespec='milliseconds'))
     connection.close()
 
-if __name__=="__main__":
+def run():
+    """Run the publisher testing script."""
     parser = argparse.ArgumentParser(description =
             'Send a notification message to another script that send a notification email.')
     parser.add_argument('recipient_name', type=str)
@@ -62,3 +61,6 @@ if __name__=="__main__":
     parser.add_argument('smtp_password', type=str)
     args = parser.parse_args()
     main(args)
+
+if __name__=="__main__":
+    run()

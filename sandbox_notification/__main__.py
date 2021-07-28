@@ -5,6 +5,7 @@ from .topics import subscribe
 
 def run():
     """Run a notification microservice."""
+
     parser = argparse.ArgumentParser(
         description = 'Subscribe to specific topics to receive relevant messages.')
     parser.add_argument('topic_str', type=str)
