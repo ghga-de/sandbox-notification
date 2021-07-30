@@ -1,0 +1,36 @@
+#!/bin/bash
+# launch service in dev container
+
+cd /workspace/sandbox_notification
+
+(sandbox-notification "#.notifications.#") &
+pid[0]=$!
+sleep 0.1
+(sandbox-notification "#.notifications.#") &
+pid[1]=$!
+
+trap "kill ${pid[0]}; kill ${pid[1]}; exit" INT EXIT TERM
+
+cd ../test/test_publisher
+
+while true
+do
+    echo
+    echo "---"
+    echo "Send notification (check /sandbox_notification/logs/ for consumer processes logs)."
+    echo "Recipient name:"
+    read RNAME
+    echo "Recipient email:"
+    read REMAIL
+    echo "SMTP server:"
+    read SMTPSERV
+    echo "SMTP port:"
+    read SMTPPORT
+    echo "SMTP username:"
+    read SMTPUSER
+    echo "SMTP password:"
+    read -s SMTPPASS
+    echo
+
+    python test_publisher.py "$RNAME" "$REMAIL" "$SMTPSERV" "$SMTPPORT" "$SMTPUSER" "$SMTPPASS"
+done
