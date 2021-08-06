@@ -13,6 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Short description of package"""  # Please adapt to package
-
-__version__ = "0.1.0"
+"""Fixtures that are used in both integration and unit tests"""

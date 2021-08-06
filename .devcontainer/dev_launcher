@@ -11,7 +11,7 @@ pid[1]=$!
 
 trap "kill ${pid[0]}; kill ${pid[1]}; exit" INT EXIT TERM
 
-cd ../test/test_publisher
+cd ../tests/test_publisher
 
 while true
 do

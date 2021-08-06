@@ -7,6 +7,7 @@ import smtplib
 import unittest
 import unittest.mock
 
+
 class TestNotificationMethods(unittest.TestCase):
     """TestCase unittest class"""
 
@@ -15,17 +16,18 @@ class TestNotificationMethods(unittest.TestCase):
         """
         Test case for sending an e-mail through smtplib.
         """
-        with unittest.mock.patch('smtplib.SMTP', autospec=True) as mock:
+        with unittest.mock.patch("smtplib.SMTP", autospec=True) as mock:
             msg = EmailMessage()
-            msg['Subject'] = 'Test'
+            msg["Subject"] = "Test"
             # Does not work when sent from Gmail
-            msg['From'] = 'apptest@ghga.de'
-            msg['To'] = 'apptest@ghga.de'
-            msg.set_content('This is a unit test')
-            server = smtplib.SMTP('localhost')
+            msg["From"] = "apptest@ghga.de"
+            msg["To"] = "apptest@ghga.de"
+            msg.set_content("This is a unit test")
+            server = smtplib.SMTP("localhost")
             server.send_message(msg)
 
             mock.return_value.send_message.assert_called_once_with(msg)
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     unittest.main()

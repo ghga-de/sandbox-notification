@@ -3,10 +3,14 @@
 
 cd /workspace
 
+
 # install in edit mode
-# use future way of installing packages
+# use-feature way of installing packages
 # install with testing dependencies
 pip install \
     --use-feature=in-tree-build \
     -e \
-    ".[testing]"
+    ".[all]"
+
+# install pre-commit hooks to git:
+pre-commit install
