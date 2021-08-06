@@ -24,7 +24,6 @@ def main(message: argparse.Namespace):
             + datetime.now().isoformat(timespec="milliseconds")
             + "_publisher.log"
         ),
-        # encoding="utf-8",
         level=logging.INFO,
     )
 
