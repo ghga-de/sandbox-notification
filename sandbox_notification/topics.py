@@ -20,6 +20,7 @@ import json
 import logging
 from pathlib import Path
 import pika
+import jsonschema
 from .core.send import send_email, MaxAttemptsReached
 
 MAX_ATTEMPTS = 5
@@ -37,6 +38,18 @@ def callback(
     logging.info(
         " [x] %s: Message received", datetime.now().isoformat(timespec="milliseconds")
     )
+
+    with open("schemata/notification.json") as schema:
+        try:
+            jsonschema.validate(instance=messageobj, schema=json.load(schema))
+        except jsonschema.exceptions.ValidationError as exc:
+            logging.error(
+                "%s: Message package does not comform to JSON schema.",
+                datetime.now().isoformat(timespec="milliseconds"),
+            )
+            logging.exception(exc)
+            channel.basic_nack(delivery_tag=method.delivery_tag, requeue=False)
+
     try:
         send_email(messageobj)
     except (MaxAttemptsReached, ValueError):

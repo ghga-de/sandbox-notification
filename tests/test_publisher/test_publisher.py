@@ -18,7 +18,7 @@ This script simulates a service that is sending
 a notification request to the notification service.
 
 Usage:
-  python sender.py "$RNAME" "$REMAIL" "$SMTPSERV" "$SMTPPORT" "$SMTPUSER" "$SMTPPASS"
+  python sender.py "$RNAME" "$REMAIL" "$MESSAGE" "$SUBJECT"
 """
 
 import argparse
@@ -29,7 +29,7 @@ from pathlib import Path
 import pika
 
 
-def main(message: argparse.Namespace):
+def main(notification: argparse.Namespace):
     """Run a test for publishing a notification."""
     Path(Path(__file__).parent / "logs/").mkdir(exist_ok=True)
     logging.basicConfig(
@@ -43,17 +43,10 @@ def main(message: argparse.Namespace):
     )
 
     messageobj = {
-        "sender": "userid",
-        "recipient": "userid",
-        "recipient_name": str(message.recipient_name),
-        "recipient_email": str(message.recipient_email),
-        "message": "Dear "
-        + str(message.recipient_name)
-        + ".\nThis is a notification from the GHGA sandbox notification service.",
-        "smtp_server": str(message.smtp_server),
-        "smtp_port": str(message.smtp_port),
-        "smtp_username": str(message.smtp_username),
-        "smtp_password": str(message.smtp_password),
+        "recipient_name": str(notification.recipient_name),
+        "recipient_email": str(notification.recipient_email),
+        "message": str(notification.message),
+        "subject": str(notification.subject),
     }
 
     msgjson = json.dumps(messageobj)
@@ -84,10 +77,8 @@ def run():
     )
     parser.add_argument("recipient_name", type=str)
     parser.add_argument("recipient_email", type=str)
-    parser.add_argument("smtp_server", type=str)
-    parser.add_argument("smtp_port", type=str)
-    parser.add_argument("smtp_username", type=str)
-    parser.add_argument("smtp_password", type=str)
+    parser.add_argument("message", type=str)
+    parser.add_argument("subject", type=str)
     args = parser.parse_args()
     main(args)
 

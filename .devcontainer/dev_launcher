@@ -22,15 +22,10 @@ do
     read RNAME
     echo "Recipient email:"
     read REMAIL
-    echo "SMTP server:"
-    read SMTPSERV
-    echo "SMTP port:"
-    read SMTPPORT
-    echo "SMTP username:"
-    read SMTPUSER
-    echo "SMTP password:"
-    read -s SMTPPASS
-    echo
+    echo "Message:"
+    read MESSAGE
+    echo "Subject:"
+    read SUBJECT
 
-    python test_publisher.py "$RNAME" "$REMAIL" "$SMTPSERV" "$SMTPPORT" "$SMTPUSER" "$SMTPPASS"
+    python test_publisher.py "$RNAME" "$REMAIL" "$MESSAGE" "$SUBJECT"
 done

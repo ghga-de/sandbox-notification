@@ -28,7 +28,6 @@ class MaxAttemptsReached(Exception):
 
 
 SENDER_EMAIL = "contact@ghga.de"
-EMAIL_SUBJECT = "GHGA Sandbox Notification"
 MAX_ATTEMPTS = 5
 
 
@@ -41,25 +40,15 @@ def send_email(data: dict):
     while attempt <= MAX_ATTEMPTS:
         try:
             msg = EmailMessage()
-            msg["Subject"] = EMAIL_SUBJECT
+            msg["Subject"] = data["subject"]
             # Does not work when sent from Gmail
             msg["From"] = SENDER_EMAIL
             msg["To"] = data["recipient_email"]
             msg.set_content(data["message"])
-            try:
-                int(data["smtp_port"])
-            except ValueError as exc:
-                logging.error(
-                    "%s: There is an error in one of the values of\
-                        the message data payload. Check the log for details",
-                    datetime.now().isoformat(timespec="milliseconds"),
-                )
-                logging.exception(exc)
-                raise
-            server = smtplib.SMTP(data["smtp_server"], int(data["smtp_port"]))
+            server = smtplib.SMTP("localhost", 0)
             server.starttls()
             server.ehlo()
-            server.login(data["smtp_username"], data["smtp_password"])
+            server.login("localhost", "")
             server.send_message(msg)
             server.quit()
             logging.info(
