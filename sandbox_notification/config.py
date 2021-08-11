@@ -17,11 +17,10 @@
 
 from functools import lru_cache
 from ghga_service_chassis_lib.config import config_from_yaml
-from ghga_service_chassis_lib.api import ApiConfigBase
 
 
 @config_from_yaml(prefix="sandbox-notification")
-class Config(ApiConfigBase):
+class Config(str):
     """Config parameters and their defaults."""
 
     # config parameter needed for the api server
