@@ -29,6 +29,9 @@ services:
     networks:
       - ghga_mnet
 
+    env_file:
+      - ./.env
+
   rabbitmq:
     image: rabbitmq:3-management
     container_name: 'rabbitmq'

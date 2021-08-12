@@ -2,8 +2,7 @@
 # rename the file name to match the
 # "prefix" configured in the config
 # module
-host: 127.0.0.1
-port: 8080
-log_level: info
-workers: 1
-auto_reload: true
+sandbox-notification_smtpserv
+sandbox-notification_smtpport
+sandbox-notification_smtpusername
+sandbox-notification_smtppassword

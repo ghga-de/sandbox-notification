@@ -21,6 +21,7 @@ import time
 from socket import gaierror
 from email.message import EmailMessage
 import smtplib
+from ..config import get_config
 
 
 class MaxAttemptsReached(Exception):
@@ -45,10 +46,11 @@ def send_email(data: dict):
             msg["From"] = SENDER_EMAIL
             msg["To"] = data["recipient_email"]
             msg.set_content(data["message"])
-            server = smtplib.SMTP("localhost", 0)
+            config = get_config()
+            server = smtplib.SMTP(config.smtpserv, config.smtpport)
             server.starttls()
             server.ehlo()
-            server.login("localhost", "")
+            server.login(config.smtpusername, config.smtppassword)
             server.send_message(msg)
             server.quit()
             logging.info(

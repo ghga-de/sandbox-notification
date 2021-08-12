@@ -17,14 +17,20 @@
 
 from functools import lru_cache
 from ghga_service_chassis_lib.config import config_from_yaml
+from pydantic import BaseSettings, Field
 
 
 @config_from_yaml(prefix="sandbox-notification")
-class Config(str):
+class Config(BaseSettings):
     """Config parameters and their defaults."""
 
-    # config parameter needed for the api server
-    # are inherited from ApiConfigBase
+    # config parameter needed
+    # are inherited from BaseSettings
+
+    smtpserv: str = Field(..., env="sandbox-notification_smtpserv")
+    smtpport: int = Field(..., env="sandbox-notification_smtpport")
+    smtpusername: str = Field(..., env="sandbox-notification_smtpusername")
+    smtppassword: str = Field(..., env="sandbox-notification_smtppassword")
 
 
 @lru_cache
