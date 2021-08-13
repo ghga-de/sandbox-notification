@@ -1,5 +1,7 @@
-host: 127.0.0.1
-port: 8080
-log_level: info
-workers: 2
-auto_reload: False
+smtp_server: smtp.gmail.com
+smtp_port: 587
+smtp_username: your-username-here
+smtp_password: your-password-here
+sender_email: your-email-here
+topic_string: "#.notifications.#"
+max_attempts: 5

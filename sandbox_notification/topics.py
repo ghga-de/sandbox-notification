@@ -23,7 +23,8 @@ import pika
 import jsonschema
 from .core.send import send_email, MaxAttemptsReached
 
-MAX_ATTEMPTS = 5
+HERE = Path(__file__).parent.resolve()
+NOTIFICATION_SCHEMA = HERE / "schemata" / "notification.json"
 
 
 def callback(
@@ -39,7 +40,7 @@ def callback(
         " [x] %s: Message received", datetime.now().isoformat(timespec="milliseconds")
     )
 
-    with open("schemata/notification.json") as schema:
+    with open(NOTIFICATION_SCHEMA) as schema:
         try:
             jsonschema.validate(instance=messageobj, schema=json.load(schema))
         except jsonschema.exceptions.ValidationError as exc:
