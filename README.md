@@ -4,6 +4,14 @@ This is the microservice that sends out notifications to the recipients such as 
 Data submitter. The notifications can be triggered by underlying events such as requests, submission or
 Data processing. The notification calls are almost always Asynchronous calls.
 
+First you need to provide the environment variables for the SMTP server configuration. You must do this by creating a `.env` file in `.devcontainer` with the following content (replacing the placeholder brackets with the actual values):
+
+```sandbox-notification_smtpserv=[SMTP server]
+sandbox-notification_smtpport=[SMTP port]
+sandbox-notification_smtpusername=[SMTP username]
+sandbox-notification_smtppassword=[SMTP password]
+```
+
 To run the application
 
     cd sandbox-notification
