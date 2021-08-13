@@ -18,8 +18,8 @@
 from datetime import datetime
 import logging
 import time
-from socket import gaierror
 from email.message import EmailMessage
+from socket import gaierror
 import smtplib
 from ..config import get_config
 
@@ -28,29 +28,29 @@ class MaxAttemptsReached(Exception):
     """Raised when the maximum number of attempts has been reached."""
 
 
-SENDER_EMAIL = "contact@ghga.de"
-MAX_ATTEMPTS = 5
-
-
 def send_email(data: dict):
     """
     Sending email
     """
 
-    attempt = 1
-    while attempt <= MAX_ATTEMPTS:
+    config = get_config()
+
+    for attempt in range(0, config.max_attempts):
         try:
             msg = EmailMessage()
             msg["Subject"] = data["subject"]
             # Does not work when sent from Gmail
-            msg["From"] = SENDER_EMAIL
+            msg["From"] = config.sender_email
             msg["To"] = data["recipient_email"]
             msg.set_content(data["message"])
-            config = get_config()
-            server = smtplib.SMTP(config.smtpserv, config.smtpport)
+
+            server = smtplib.SMTP(config.smtp_server, config.smtp_port)
+
             server.starttls()
+
             server.ehlo()
-            server.login(config.smtpusername, config.smtppassword)
+
+            server.login(config.smtp_username, config.smtp_password)
             server.send_message(msg)
             server.quit()
             logging.info(
@@ -61,15 +61,14 @@ def send_email(data: dict):
         except (smtplib.SMTPException, gaierror) as exc:
             logging.warning(
                 datetime.now().isoformat(timespec="milliseconds")
-                + f": There has been an error sending an e-mail notification on attempt\
-{attempt}/{MAX_ATTEMPTS}."
+                + f": There has been an error sending an e-mail notification on attempt \
+                    {attempt+1}/{config.max_attempts}."
             )
             logging.exception(exc)
-            attempt += 1
             time.sleep(5)
-    else:
-        logging.error(
-            "%s: Maximum number of attempts reached. Email could not be sent.",
-            datetime.now().isoformat(timespec="milliseconds"),
-        )
-        raise MaxAttemptsReached()
+
+    logging.error(
+        "%s: Maximum number of attempts reached. Email could not be sent.",
+        datetime.now().isoformat(timespec="milliseconds"),
+    )
+    raise MaxAttemptsReached()

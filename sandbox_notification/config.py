@@ -17,20 +17,20 @@
 
 from functools import lru_cache
 from ghga_service_chassis_lib.config import config_from_yaml
-from pydantic import BaseSettings, Field
+from pydantic import BaseSettings
 
 
-@config_from_yaml(prefix="sandbox-notification")
+@config_from_yaml(prefix="sandbox_notification")
 class Config(BaseSettings):
     """Config parameters and their defaults."""
 
-    # config parameter needed
-    # are inherited from BaseSettings
-
-    smtpserv: str = Field(..., env="sandbox-notification_smtpserv")
-    smtpport: int = Field(..., env="sandbox-notification_smtpport")
-    smtpusername: str = Field(..., env="sandbox-notification_smtpusername")
-    smtppassword: str = Field(..., env="sandbox-notification_smtppassword")
+    smtp_server: str
+    smtp_port: int
+    smtp_username: str
+    smtp_password: str
+    sender_email: str
+    topic_string: str = "#.notifications.#"
+    max_attempts: int = 5
 
 
 @lru_cache

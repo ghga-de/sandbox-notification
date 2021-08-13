@@ -1,8 +1,0 @@
-# Please adapt to package name:
-# rename the file name to match the
-# "prefix" configured in the config
-# module
-sandbox-notification_smtpserv
-sandbox-notification_smtpport
-sandbox-notification_smtpusername
-sandbox-notification_smtppassword
