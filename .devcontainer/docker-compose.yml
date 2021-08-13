@@ -1,29 +1,37 @@
-version: "3.2"
+version: "3"
+
 services:
   sandbox_notification:
     build:
       context: .
-      dockerfile: Dockerfile
-      
-    command: /bin/sh -c "while sleep 1000; do :; done"
-    
-    ports:
-      - 8000:8000
+      dockerfile: ./Dockerfile
+      args:
+        # [Choice] Python version: 3, 3.8, 3.7, 3.6
+        VARIANT: 3.9
+        # Please adapt to package name:
+        PACKAGE_NAME: "sandbox_notification"
+        # On Linux, you may need to update USER_UID and USER_GID below if not your local UID is not 1000.
+        USER_UID: 1000
+        USER_GID: 1000
+
     volumes:
       - ..:/workspace:cached
-    networks:
-      - ghga_mnet
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+
+    # Uncomment the next line to use a non-root user for all processes.
+    user: vscode
+
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
 
   rabbitmq:
     image: rabbitmq:3-management
     container_name: 'rabbitmq'
     hostname: 'rabbitmq'
+
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
     ports:
       - 5672:5672
       - 15672:15672
-    networks:
-      - ghga_mnet
-
-networks:
-  ghga_mnet:
-    driver: bridge

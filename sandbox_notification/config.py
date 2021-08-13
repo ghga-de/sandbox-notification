@@ -13,6 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Short description of package"""  # Please adapt to package
+"""Config Parameter Modeling and Parsing"""
 
-__version__ = "0.1.0"
+from functools import lru_cache
+from ghga_service_chassis_lib.config import config_from_yaml
+
+
+@config_from_yaml(prefix="sandbox-notification")
+class Config(str):
+    """Config parameters and their defaults."""
+
+    # config parameter needed for the api server
+    # are inherited from ApiConfigBase
+
+
+@lru_cache
+def get_config():
+    """Get runtime configuration."""
+    return Config()
