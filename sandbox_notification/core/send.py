@@ -50,8 +50,8 @@ def send_email(data: dict):
                 int(data["smtp_port"])
             except ValueError as exc:
                 logging.error(
-                    "%s: There is an error in one of the values of\
-                        the message data payload. Check the log for details",
+                    "%s: There is an error in one of the values of the message data payload.\
+Check the log for details",
                     datetime.now().isoformat(timespec="milliseconds"),
                 )
                 logging.exception(exc)
@@ -70,8 +70,8 @@ def send_email(data: dict):
         except (smtplib.SMTPException, gaierror) as exc:
             logging.warning(
                 datetime.now().isoformat(timespec="milliseconds")
-                + f": There has been an error sending an e-mail notification on attempt \
-                    {attempt}/{MAX_ATTEMPTS}."
+                + f": There has been an error sending an e-mail notification on attempt\
+{attempt}/{MAX_ATTEMPTS}."
             )
             logging.exception(exc)
             attempt += 1
