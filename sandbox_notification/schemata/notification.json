@@ -1,0 +1,31 @@
+{
+  "$id": "https://example.com/product.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "A notification message",
+  "properties": {
+    "message": {
+      "description": "Message Body Text (string)",
+      "type": "string"
+    },
+    "recipient_email": {
+      "description": "john.doe@email.com",
+      "type": "string"
+    },
+    "recipient_name": {
+      "description": "John Doe",
+      "type": "string"
+    },
+    "subject": {
+      "description": "Message Subject",
+      "type": "string"
+    }
+  },
+  "required": [
+    "message",
+    "recipient_email",
+    "recipient_name",
+    "subject"
+  ],
+  "title": "Notification",
+  "type": "object"
+}
