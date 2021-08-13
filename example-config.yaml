@@ -1,7 +1,10 @@
 smtp_server: smtp.gmail.com
 smtp_port: 587
-smtp_username: your-username-here
-smtp_password: your-password-here
 sender_email: your-email-here
 topic_string: "#.notifications.#"
 max_attempts: 5
+
+# Warning, these secrets are better specified
+# via environment variables or file secrets:
+smtp_username: your-username-here
+smtp_password: your-password-here
