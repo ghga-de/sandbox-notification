@@ -62,7 +62,7 @@ def send_email(data: dict):
             logging.warning(
                 datetime.now().isoformat(timespec="milliseconds")
                 + f": There has been an error sending an e-mail notification on attempt \
-                    {attempt}/{config.max_attempts}."
+                    {attempt+1}/{config.max_attempts}."
             )
             logging.exception(exc)
             time.sleep(5)
