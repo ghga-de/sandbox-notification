@@ -4,7 +4,7 @@ sender_email: your-email-here
 
 rabbitmq_host: localhost
 rabbitmq_port: 5672
-topic_name: notifications
+topic_name: send_notification
 max_attempts: 5
 log_level: info
 

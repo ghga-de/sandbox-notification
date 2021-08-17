@@ -36,7 +36,7 @@ class Config(BaseSettings):
 
     rabbitmq_host: str
     rabbitmq_port: int
-    topic_name: str = "notifications"
+    topic_name: str = "send_notification"
 
     max_attempts: int = 5
 
