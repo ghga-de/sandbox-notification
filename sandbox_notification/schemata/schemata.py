@@ -13,21 +13,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Entrypoint of the package"""
+"""Get Schemata for Async Messaging"""
 
-import logging
-from .pubsub import subscribe
-from .config import get_config
+import json
+from functools import lru_cache
+from pathlib import Path
 
-
-def run():
-    """Run the service."""
-
-    config = get_config()
-    logging.basicConfig(level=config.log_level.upper())
-
-    subscribe()
+HERE = Path(__file__).parent.resolve()
 
 
-if __name__ == "__main__":
-    run()
+@lru_cache
+def get_schema(message_type: str):
+    """Get schema for a specific message_type.
+    This function is cached.
+
+    Args:
+        message_type (str): Type of message.
+    """
+    json_schema_path = HERE / f"{message_type}.json"
+
+    with open(json_schema_path, "r") as schema_file:
+        schema_dict = json.load(schema_file)
+
+    return schema_dict
