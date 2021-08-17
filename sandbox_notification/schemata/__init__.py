@@ -13,4 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Subpackage Containing Schemas for Async Messaging"""
+"""Subpackage Containing Schemata for Async Messaging"""
