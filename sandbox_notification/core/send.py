@@ -21,11 +21,8 @@ import time
 from email.message import EmailMessage
 from socket import gaierror
 import smtplib
+from ghga_service_chassis_lib.pubsub import MaxAttemptsReached
 from ..config import get_config
-
-
-class MaxAttemptsReached(Exception):
-    """Raised when the maximum number of attempts has been reached."""
 
 
 def send_email(data: dict):
@@ -57,7 +54,7 @@ def send_email(data: dict):
                 "  [>] %s: Email notification sent.\n",
                 datetime.now().isoformat(timespec="milliseconds"),
             )
-            break
+            return None
         except (smtplib.SMTPException, gaierror) as exc:
             logging.warning(
                 datetime.now().isoformat(timespec="milliseconds")

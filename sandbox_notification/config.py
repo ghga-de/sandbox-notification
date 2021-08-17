@@ -15,9 +15,13 @@
 
 """Config Parameter Modeling and Parsing"""
 
+from typing import Literal
 from functools import lru_cache
 from ghga_service_chassis_lib.config import config_from_yaml
 from pydantic import BaseSettings
+
+# type alias for log level parameter
+LogLevel = Literal["critical", "error", "warning", "info", "debug", "trace"]
 
 
 @config_from_yaml(prefix="sandbox_notification")
@@ -29,8 +33,14 @@ class Config(BaseSettings):
     smtp_username: str
     smtp_password: str
     sender_email: str
-    topic_string: str = "#.notifications.#"
+
+    rabbitmq_host: str
+    rabbitmq_port: int
+    topic_name: str = "send_notification"
+
     max_attempts: int = 5
+
+    log_level: LogLevel = "info"
 
 
 @lru_cache

@@ -13,21 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Entrypoint of the package"""
-
-import logging
-from .pubsub import subscribe
-from .config import get_config
-
-
-def run():
-    """Run the service."""
-
-    config = get_config()
-    logging.basicConfig(level=config.log_level.upper())
-
-    subscribe()
-
-
-if __name__ == "__main__":
-    run()
+"""Subpackage Containing Schemata for Async Messaging"""

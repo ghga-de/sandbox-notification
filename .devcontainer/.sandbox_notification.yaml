@@ -1,2 +1,5 @@
-topic_string: "#.notifications.#"
-max_attempts: 5
+rabbitmq_host: rabbitmq
+rabbitmq_port: 5672
+topic_name: send_notification
+max_attempts: 1
+log_level: debug
