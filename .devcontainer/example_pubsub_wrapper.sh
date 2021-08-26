@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Copyright 2021 Universität Tübingen, DKFZ and EMBL
 # for the German Human Genome-Phenome Archive (GHGA)
 #
@@ -13,21 +15,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Entrypoint of the package"""
+cd /workspace/.devcontainer
+mkdir -p ./logs
 
-import logging
-from .pubsub import subscribe
-from .config import get_config
+(sandbox-notification > logs/svc_1.log 2>&1) &
+pid[0]=$!
+sleep 0.1
+(sandbox-notification > logs/svc_2.log 2>&1) &
+pid[1]=$!
 
+trap "kill ${pid[0]}; kill ${pid[1]}; exit" INT EXIT TERM
 
-def run():
-    """Run the service."""
+while true
+do
+    echo
+    echo "---"
+    echo "Send notification (check /sandbox_notification/logs/ for consumer processes logs)."
+    echo "Recipient name:"
+    read RNAME
+    echo "Recipient email:"
+    read REMAIL
+    echo "Message:"
+    read MESSAGE
+    echo "Subject:"
+    read SUBJECT
 
-    config = get_config()
-    logging.basicConfig(level=config.log_level.upper())
-
-    subscribe()
-
-
-if __name__ == "__main__":
-    run()
+    ./example_publisher.py "$RNAME" "$REMAIL" "$MESSAGE" "$SUBJECT" > logs/pub.log
+done
