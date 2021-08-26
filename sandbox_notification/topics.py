@@ -40,7 +40,7 @@ def callback(
         " [x] %s: Message received", datetime.now().isoformat(timespec="milliseconds")
     )
 
-    with open(NOTIFICATION_SCHEMA) as schema:
+    with open(NOTIFICATION_SCHEMA, encoding="utf-8") as schema:
         try:
             jsonschema.validate(instance=messageobj, schema=json.load(schema))
         except jsonschema.exceptions.ValidationError as exc:
