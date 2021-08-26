@@ -13,26 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Get Schemata for Async Messaging"""
-
-import json
-from functools import lru_cache
-from pathlib import Path
-
-HERE = Path(__file__).parent.resolve()
-
-
-@lru_cache
-def get_schema(message_type: str):
-    """Get schema for a specific message_type.
-    This function is cached.
-
-    Args:
-        message_type (str): Type of message.
-    """
-    json_schema_path = HERE / f"{message_type}.json"
-
-    with open(json_schema_path, "r", encoding="utf-8") as schema_file:
-        schema_dict = json.load(schema_file)
-
-    return schema_dict
+recursive-include sandbox_notification/schemata *.json
