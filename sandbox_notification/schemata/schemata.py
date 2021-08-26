@@ -32,7 +32,7 @@ def get_schema(message_type: str):
     """
     json_schema_path = HERE / f"{message_type}.json"
 
-    with open(json_schema_path, "r") as schema_file:
+    with open(json_schema_path, "r", encoding="utf-8") as schema_file:
         schema_dict = json.load(schema_file)
 
     return schema_dict
