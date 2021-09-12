@@ -1,6 +1,7 @@
 smtp_server: smtp.gmail.com
 smtp_port: 587
 sender_email: your-email-here
+smtp_use_tls: false
 
 rabbitmq_host: localhost
 rabbitmq_port: 5672
