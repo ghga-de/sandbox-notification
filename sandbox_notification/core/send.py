@@ -43,7 +43,7 @@ def send_email(data: dict):
 
             server = smtplib.SMTP(config.smtp_server, config.smtp_port)
 
-            server.starttls()
+            # server.starttls()
 
             server.ehlo()
 

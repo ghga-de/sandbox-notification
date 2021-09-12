@@ -32,6 +32,7 @@ class Config(BaseSettings):
     smtp_port: int
     smtp_username: str
     smtp_password: str
+    smtp_use_tls: bool = True
     sender_email: str
 
     rabbitmq_host: str
