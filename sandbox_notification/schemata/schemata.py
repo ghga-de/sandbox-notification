@@ -13,20 +13,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM python:3.9.6-buster
+"""Get Schemata for Async Messaging"""
 
-COPY . /service
-WORKDIR /service
+import json
+from functools import lru_cache
+from pathlib import Path
 
-RUN pip install .
+HERE = Path(__file__).parent.resolve()
 
-# create new user and execute as that user
-RUN useradd --create-home appuser
-WORKDIR /home/appuser
-USER appuser
 
-ENV PYTHONUNBUFFERED=1
+@lru_cache
+def get_schema(message_type: str):
+    """Get schema for a specific message_type.
+    This function is cached.
 
-# Please adapt to package name:
-ENTRYPOINT ["sandbox-notification"]
+    Args:
+        message_type (str): Type of message.
+    """
+    json_schema_path = HERE / f"{message_type}.json"
 
+    with open(json_schema_path, "r", encoding="utf-8") as schema_file:
+        schema_dict = json.load(schema_file)
+
+    return schema_dict

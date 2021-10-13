@@ -13,20 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM python:3.9.6-buster
+"""Fixtures that exclusively used in unit tests"""
 
-COPY . /service
-WORKDIR /service
+from pathlib import Path
 
-RUN pip install .
-
-# create new user and execute as that user
-RUN useradd --create-home appuser
-WORKDIR /home/appuser
-USER appuser
-
-ENV PYTHONUNBUFFERED=1
-
-# Please adapt to package name:
-ENTRYPOINT ["sandbox-notification"]
-
+BASE_DIR = Path(__file__).parent.resolve()

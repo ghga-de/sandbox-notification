@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Copyright 2021 Universität Tübingen, DKFZ and EMBL
 # for the German Human Genome-Phenome Archive (GHGA)
 #
@@ -13,20 +15,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM python:3.9.6-buster
+cd /workspace/.devcontainer
+mkdir -p ./logs
 
-COPY . /service
-WORKDIR /service
+(sandbox-notification > logs/svc_1.log 2>&1) &
+pid[0]=$!
+sleep 0.1
+(sandbox-notification > logs/svc_2.log 2>&1) &
+pid[1]=$!
 
-RUN pip install .
+trap "kill ${pid[0]}; kill ${pid[1]}; exit" INT EXIT TERM
 
-# create new user and execute as that user
-RUN useradd --create-home appuser
-WORKDIR /home/appuser
-USER appuser
+while true
+do
+    echo
+    echo "---"
+    echo "Send notification (check /sandbox_notification/logs/ for consumer processes logs)."
+    echo "Recipient name:"
+    read RNAME
+    echo "Recipient email:"
+    read REMAIL
+    echo "Message:"
+    read MESSAGE
+    echo "Subject:"
+    read SUBJECT
 
-ENV PYTHONUNBUFFERED=1
-
-# Please adapt to package name:
-ENTRYPOINT ["sandbox-notification"]
-
+    ./example_publisher.py "$RNAME" "$REMAIL" "$MESSAGE" "$SUBJECT" > logs/pub.log
+done

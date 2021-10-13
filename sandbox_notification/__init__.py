@@ -13,20 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM python:3.9.6-buster
+"""Short description of package"""  # Please adapt to package
 
-COPY . /service
-WORKDIR /service
-
-RUN pip install .
-
-# create new user and execute as that user
-RUN useradd --create-home appuser
-WORKDIR /home/appuser
-USER appuser
-
-ENV PYTHONUNBUFFERED=1
-
-# Please adapt to package name:
-ENTRYPOINT ["sandbox-notification"]
-
+__version__ = "0.1.0"

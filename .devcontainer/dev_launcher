@@ -1,0 +1,6 @@
+#!/bin/bash
+# launch service in dev container
+
+cd /workspace/.devcontainer
+
+sandbox-notification

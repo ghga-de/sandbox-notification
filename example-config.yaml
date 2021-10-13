@@ -1,0 +1,15 @@
+smtp_server: smtp.gmail.com
+smtp_port: 587
+sender_email: your-email-here
+smtp_use_tls: false
+
+rabbitmq_host: localhost
+rabbitmq_port: 5672
+topic_name: send_notification
+max_attempts: 5
+log_level: info
+
+# Warning, these secrets are better specified
+# via environment variables or file secrets:
+smtp_username: your-username-here
+smtp_password: your-password-here

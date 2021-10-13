@@ -1,0 +1,11 @@
+rabbitmq_host: rabbitmq
+rabbitmq_port: 5672
+topic_name: send_notification
+max_attempts: 1
+log_level: debug
+smtp_server: fakesmtp
+smtp_port: 2525
+smtp_username: Example
+smtp_password: example
+sender_email: example@example.org
+smtp_use_tls: false

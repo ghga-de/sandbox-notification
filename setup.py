@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # Copyright 2021 Universität Tübingen, DKFZ and EMBL
 # for the German Human Genome-Phenome Archive (GHGA)
 #
@@ -13,20 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM python:3.9.6-buster
+"""Setup script for pip. This setup configs are specified in the `setup.cfg` file"""
 
-COPY . /service
-WORKDIR /service
+import setuptools
 
-RUN pip install .
-
-# create new user and execute as that user
-RUN useradd --create-home appuser
-WORKDIR /home/appuser
-USER appuser
-
-ENV PYTHONUNBUFFERED=1
-
-# Please adapt to package name:
-ENTRYPOINT ["sandbox-notification"]
-
+if __name__ == "__main__":
+    setuptools.setup()

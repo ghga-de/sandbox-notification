@@ -13,20 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM python:3.9.6-buster
+"""Utils for Fixture handling"""
 
-COPY . /service
-WORKDIR /service
+import yaml
 
-RUN pip install .
 
-# create new user and execute as that user
-RUN useradd --create-home appuser
-WORKDIR /home/appuser
-USER appuser
-
-ENV PYTHONUNBUFFERED=1
-
-# Please adapt to package name:
-ENTRYPOINT ["sandbox-notification"]
-
+def read_yaml(path: str) -> dict:
+    """Read yaml file and return content as dict."""
+    with open(path, "r") as file_:
+        return yaml.safe_load(file_)

@@ -13,20 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM python:3.9.6-buster
+"""Entrypoint of the package"""
 
-COPY . /service
-WORKDIR /service
+import logging
+from .pubsub import subscribe
+from .config import get_config
 
-RUN pip install .
 
-# create new user and execute as that user
-RUN useradd --create-home appuser
-WORKDIR /home/appuser
-USER appuser
+def run():
+    """Run the service."""
 
-ENV PYTHONUNBUFFERED=1
+    config = get_config()
+    logging.basicConfig(level=config.log_level.upper())
 
-# Please adapt to package name:
-ENTRYPOINT ["sandbox-notification"]
+    subscribe()
 
+
+if __name__ == "__main__":
+    run()
