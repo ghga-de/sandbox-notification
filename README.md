@@ -1,3 +1,9 @@
+**Depreciation Note:   
+Please note, this repo was part of an implementation study and is not longer maintained.
+Please do not use for production.** 
+
+---
+
 # sandbox-notification
 
 This is the microservice that sends out notifications to the recipients such as Data steward, Data requester or
